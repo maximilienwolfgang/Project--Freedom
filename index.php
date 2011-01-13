@@ -1,7 +1,5 @@
 <pre>
 <?php
-define("BITLY_API_KEY",
-	urlencode("R_3663116da9326b73d08a603e38a2bbeb"));
 define("PROXY_URL",
 	urlencode("http://sitesdir/freedom/index.php"));
 

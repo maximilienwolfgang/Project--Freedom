@@ -43,8 +43,9 @@
  * @copyright 2011 Max Bucknell-Leahy
  * @license   http://www.opensource.org/licenses/bsd-license.php 
  * The BSD License
- * @version   1.0
+ * @version   0.1
  * @link      http://max.dafmusic.com/tag/project-freedom
+ * @link	  http://www.github.com/maxbucknell/Project--Freedom
  *
  * @todo Create some nice interface for modifying the config file.
  */
