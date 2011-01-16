@@ -80,7 +80,7 @@ class Link_Sanitiser {
 		if ($link_type === ABSOLUTE_PATH) {
 			return SITE_URL . $link;
 		} else if ($link_type === RELATIVE_PATH) {
-			return PAGE_URL.$link;
+			return PAGE_URL."/".$link;
 		} else if ($link_type === ANCHOR) {
 			return NULL;
 		} else {
@@ -95,18 +95,11 @@ class Link_Sanitiser {
 	private function add_proxy ($link) {
 		return PROXY_URL . "?encurl=" . $link;
 	}
-	
-    /**
-     * Short description for function
-     * 
-     * Long description (if any) ...
-     * 
-     * @param  unknown $link Parameter description (if any) ...
-     * @return unknown Return description (if any) ...
-     * @access private
-     */
+
 	private function set_up_link ($link) {
-		return $this->convert_link_to_url($link);
+		return $this->add_proxy(
+			$this->encrypt(
+				$this->convert_link_to_url($link)));
 	}
 	
     /**
@@ -134,22 +127,17 @@ class Link_Sanitiser {
 		$links = $links[0];
 		$links = preg_replace("/href=[\"']?/", "", $links);
 		$links = preg_replace("/[]\"\>' \t]*/", "", $links);
-		$linksassoc = array();
-		foreach ($links as $link) {
-			$linksassoc[$link] = $link;
-		}
-		$links = $linksassoc;
-		unset($linksassoc);
-		$i = 0;
-		foreach ($links as $link) {
-			$link = $this->set_up_link($link);
-			if ($link === NULL) {
-				unset($link);
+		$old_links = $links;
+		$i = count($links);
+		while ($i--) {
+			$links[$i] = $this->set_up_link($links[$i]);
+			if ($links[$i] ===
+				"http://sitesdir/freedom/index.php?encurl=") {
+				unset($links[$i]);
 			}
 		}
-		var_dump($links);
+		// echo "<pre>"; var_dump($links);die();
+		$html = str_replace($old_links, $links, $html);
+		return $html;
 	}
 }
-
-$link = new Link_Sanitiser;
-$link->sort_hyperlinks(file_get_contents("index.html"));
